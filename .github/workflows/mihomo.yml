@@ -32,8 +32,8 @@ jobs:
         run: |
           echo "mihomo-v${SING_VERSION}" >> $GITHUB_STEP_SUMMARY
           mkdir -p mihomo/{rule_set_site,rule_set_ip}
-          wget https://github.com/MetaCubeX/mihomo/releases/download/v"${SING_VERSION}"/mihomo-linux-amd64-v"${SING_VERSION}".gz -qO mihomo.gz && gzip -d mihomo.gz
-          sudo install -Dm755 mihomo /usr/bin/
+          wget https://github.com/MetaCubeX/mihomo/releases/download/v"${SING_VERSION}"/mihomo-linux-amd64-v"${SING_VERSION}".gz -qO mihomo1.gz && gzip -d mihomo1.gz
+          sudo install -Dm755 mihomo1 /usr/bin/mihomo
           ./rule-sb.sh
 
       - name: Git push assets to "mihomo" branch
