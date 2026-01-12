@@ -123,7 +123,7 @@ sort merged.txt | uniq > adblock-ip.txt
 
 sed -Ei 's/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)$/\1\/32/' adblock-ip.txt
 mihomo convert-ruleset ipcidr text "adblock-ip.txt" "adblock-ip.mrs"
-mv -f "adblock-ip.mrs" ${GITHUB_WORKSPACE}/mihomo/rule_set_site
+mv -f "adblock-ip.mrs" ${GITHUB_WORKSPACE}/mihomo/rule_set_ip
 
 # 清理临时文件
 rm -rf ${GITHUB_WORKSPACE}/adguard
