@@ -3,11 +3,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "10 23 * * *"
-  push:
-    branches:
-      - master
-    paths-ignore:
-      - "**/README.md"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,7 +33,7 @@ jobs:
           echo "mihomo-v${SING_VERSION}" >> $GITHUB_STEP_SUMMARY
           mkdir -p mihomo/{rule_set_site,rule_set_ip}
           wget https://github.com/MetaCubeX/mihomo/releases/download/v"${SING_VERSION}"/mihomo-linux-amd64-"${SING_VERSION}".gz -qO mihomo.gz && gzip -d mihomo.gz
-          sudo install -Dp mihomo /usr/bin/
+          sudo install -Dm755 mihomo /usr/bin/
           ./rule-sb.sh
 
       - name: Git push assets to "mihomo" branch

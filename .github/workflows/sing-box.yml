@@ -3,11 +3,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "20 23 * * *"
-  push:
-    branches:
-      - master
-    paths-ignore:
-      - "**/README.md"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -37,7 +33,7 @@ jobs:
           echo "sing-box-v${SING_VERSION}" >> $GITHUB_STEP_SUMMARY
           mkdir -p sing-box/{rule_set_site,rule_set_ip}
           wget https://github.com/SagerNet/sing-box/releases/download/v"${SING_VERSION}"/sing-box-"${SING_VERSION}"-linux-amd64.tar.gz -qO sing-box.tar.gz && tar zxvf sing-box.tar.gz
-          sudo install -Dp sing-box-"${SING_VERSION}"-linux-amd64/sing-box /usr/bin/
+          sudo install -Dm755 sing-box-"${SING_VERSION}"-linux-amd64/sing-box /usr/bin/
           rm -rf sing-box-* sing-box.tar.gz
           ./rule-sb.sh
 
