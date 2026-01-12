@@ -1,8 +1,8 @@
-name: Build rules files
+name: rules sing-box
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 23 * * *"
+    - cron: "20 23 * * *"
   push:
     branches:
       - master
@@ -39,7 +39,7 @@ jobs:
           wget https://github.com/SagerNet/sing-box/releases/download/v"${SING_VERSION}"/sing-box-"${SING_VERSION}"-linux-amd64.tar.gz -qO sing-box.tar.gz && tar zxvf sing-box.tar.gz
           sudo install -Dp sing-box-"${SING_VERSION}"-linux-amd64/sing-box /usr/bin/
           rm -rf sing-box-* sing-box.tar.gz
-          ./rule-up.sh
+          ./rule-sb.sh
 
       - name: Git push assets to "rule_set" branch
         run: |
@@ -53,3 +53,9 @@ jobs:
             git commit -m "Released on ${RELEASE_NAME}"
             git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
             git push -f -u origin rule_set
+
+      - name: Delete workflow runs
+        uses: GitRML/delete-workflow-runs@main
+        with:
+          retain_days: 3
+          keep_minimum_runs: 3

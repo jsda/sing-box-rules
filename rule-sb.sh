@@ -40,7 +40,7 @@ echo "🧹 正在去重..."
 sort merged.txt | uniq > adblockdns.txt
 
 sing-box rule-set convert --type adguard --output "adblockdns-ios.srs" "adblockdns.txt"
-mv -f "adblockdns-ios.srs" ${GITHUB_WORKSPACE}/rule_set/rule_set_site
+mv -f "adblockdns-ios.srs" ${GITHUB_WORKSPACE}/sing-box/rule_set_site
 
 
 
@@ -49,7 +49,7 @@ URLS=(
     "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.txt"
     "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/ultimate.txt"
     "https://raw.githubusercontent.com/ppfeufer/adguard-filter-list/master/blocklist"
-    "https://badmojr.github.io/1Hosts/Xtra/adblock.txt"
+    "https://raw.githubusercontent.com/badmojr/1Hosts/refs/heads/master/Xtra/adblock.txt"
 )
 
 # 下载文件
@@ -79,7 +79,7 @@ echo "🧹 正在去重..."
 sort merged.txt | uniq > adblockdns.txt
 
 sing-box rule-set convert --type adguard --output "adblockdns.srs" "adblockdns.txt"
-mv -f "adblockdns.srs" ${GITHUB_WORKSPACE}/rule_set/rule_set_site
+mv -f "adblockdns.srs" ${GITHUB_WORKSPACE}/sing-box/rule_set_site
 
 # 清理临时文件
 rm -rf ./*
@@ -122,7 +122,7 @@ echo "🧹 正在去重..."
 sort merged.txt | uniq > adblock-ip.txt
 
 ${GITHUB_WORKSPACE}/adblock-sb.sh adblock-ip.txt > adblock-ip.json
-sing-box rule-set compile adblock-ip.json -o ${GITHUB_WORKSPACE}/rule_set/rule_set_ip/adblock-ip.srs
+sing-box rule-set compile adblock-ip.json -o ${GITHUB_WORKSPACE}/sing-box/rule_set_ip/adblock-ip.srs
 
 # 清理临时文件
 rm -rf ${GITHUB_WORKSPACE}/adguard

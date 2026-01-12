@@ -1,0 +1,60 @@
+name: rules mihomo
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "10 23 * * *"
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "**/README.md"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Set variables
+        run: |
+          echo "RELEASE_NAME=$(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M')" >> $GITHUB_ENV
+          echo "SING_VERSION=$(curl -s https://api.github.com/repos/MetaCubeX/mihomo/releases/latest | perl -ne 'if(/"tag_name":\s*"v([0-9a-zA-Z\.-]+)"/){ print "$1\n"; last }')" >> $GITHUB_ENV
+        shell: bash
+
+      - name: get latest go version
+        id: go_latest
+        run: |
+          echo go_latest=$(curl -s https://raw.githubusercontent.com/actions/go-versions/update-versions-manifest-file/versions-manifest.json | grep -oE '"version": "[0-9]{1}.[0-9]{1,}(.[0-9]{1,})?"' | head -1 | cut -d':' -f2 | sed 's/ //g; s/"//g') >> $GITHUB_OUTPUT
+
+      - name: setup go
+        uses: actions/setup-go@master
+        with:
+          go-version: ${{steps.go_latest.outputs.go_latest}}
+          cache-dependency-path: ./custom/go.sum
+
+      - name: Add AdGuard DNS Filter
+        run: |
+          echo "mihomo-v${SING_VERSION}" >> $GITHUB_STEP_SUMMARY
+          mkdir -p rule_set/{rule_set_site,rule_set_ip}
+          wget https://github.com/MetaCubeX/mihomo/releases/download/v"${SING_VERSION}"/mihomo-linux-amd64-"${SING_VERSION}".gz -qO mihomo.gz && gzip -d mihomo.gz
+          sudo install -Dp mihomo /usr/bin/
+          ./rule-sb.sh
+
+      - name: Git push assets to "rule_set" branch
+        run: |
+            cd rule_set || exit 1
+            ls
+            git init
+            git config --local user.name "github-actions[bot]"
+            git config --local user.email "github-actions[bot]@users.noreply.github.com"
+            git checkout -b rule_set
+            git add .
+            git commit -m "Released on ${RELEASE_NAME}"
+            git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+            git push -f -u origin rule_set
+
+      - name: Delete workflow runs
+        uses: GitRML/delete-workflow-runs@main
+        with:
+          retain_days: 3
+          keep_minimum_runs: 3
