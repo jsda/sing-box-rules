@@ -40,7 +40,7 @@ echo "🧹 正在去重..."
 sort merged.txt | uniq > adblockdns.txt
 
 mihomo convert-ruleset domain text "adblockdns.txt" "adblockdns-ios.mrs"
-mv -f "adblockdns-ios.srs" ${GITHUB_WORKSPACE}/mihomo/rule_set_site
+mv -f "adblockdns-ios.mrs" ${GITHUB_WORKSPACE}/mihomo/rule_set_site
 
 
 
@@ -79,7 +79,7 @@ echo "🧹 正在去重..."
 sort merged.txt | uniq > adblockdns.txt
 
 mihomo convert-ruleset domain text "adblockdns.txt" "adblockdns.mrs"
-mv -f "adblockdns.srs" ${GITHUB_WORKSPACE}/mihomo/rule_set_site
+mv -f "adblockdns.mrs" ${GITHUB_WORKSPACE}/mihomo/rule_set_site
 
 # 清理临时文件
 rm -rf ./*
@@ -121,7 +121,9 @@ cat "$DOWNLOAD_DIR"/* > merged.txt
 echo "🧹 正在去重..."
 sort merged.txt | uniq > adblock-ip.txt
 
+sed -Ei 's/^([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)$/\1\/32/' adblock-ip.txt
 mihomo convert-ruleset ipcidr text "adblock-ip.txt" "adblock-ip.mrs"
+mv -f "adblock-ip.mrs" ${GITHUB_WORKSPACE}/mihomo/rule_set_site
 
 # 清理临时文件
 rm -rf ${GITHUB_WORKSPACE}/adguard
