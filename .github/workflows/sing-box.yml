@@ -35,24 +35,24 @@ jobs:
       - name: Add AdGuard DNS Filter
         run: |
           echo "sing-box-v${SING_VERSION}" >> $GITHUB_STEP_SUMMARY
-          mkdir -p rule_set/{rule_set_site,rule_set_ip}
+          mkdir -p sing-box/{rule_set_site,rule_set_ip}
           wget https://github.com/SagerNet/sing-box/releases/download/v"${SING_VERSION}"/sing-box-"${SING_VERSION}"-linux-amd64.tar.gz -qO sing-box.tar.gz && tar zxvf sing-box.tar.gz
           sudo install -Dp sing-box-"${SING_VERSION}"-linux-amd64/sing-box /usr/bin/
           rm -rf sing-box-* sing-box.tar.gz
           ./rule-sb.sh
 
-      - name: Git push assets to "rule_set" branch
+      - name: Git push assets to "sing-box" branch
         run: |
-            cd rule_set || exit 1
+            cd sing-box || exit 1
             ls
             git init
             git config --local user.name "github-actions[bot]"
             git config --local user.email "github-actions[bot]@users.noreply.github.com"
-            git checkout -b rule_set
+            git checkout -b sing-box
             git add .
             git commit -m "Released on ${RELEASE_NAME}"
             git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
-            git push -f -u origin rule_set
+            git push -f -u origin sing-box
 
       - name: Delete workflow runs
         uses: GitRML/delete-workflow-runs@main
