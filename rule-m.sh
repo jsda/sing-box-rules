@@ -10,7 +10,7 @@ cd ${GITHUB_WORKSPACE}/adguard
 # 定义 URL 列表
 URLS=(
     "https://raw.githubusercontent.com/hagezi/dns-blocklists/main/domains/doh.txt"
-    "https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/domain.txt"
+    "https://raw.githubusercontent.com/217heidai/adblockfilters/main/rules/adblockdomain.txt"
 )
 
 # 下载文件
